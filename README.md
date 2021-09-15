@@ -4,7 +4,7 @@ A React Native module that allows you to select a photo/video from the device li
 
 <p align="center">
   <img src="https://img.shields.io/npm/dw/react-native-image-picker" />
-  <img src="https://img.shields.io/npm/v/react-native-image-picker" />
+  <img src="https://img.shields.io/npm/v/@yunfeic/react-native-imagepicker" />
 </p>
 
 ### Make sure you're reading the doc applicable to your version, for example if your using version 3.8.0 go to tag 3.8.0 and read those docs. This doc is always that of main branch.
@@ -14,13 +14,13 @@ A React Native module that allows you to select a photo/video from the device li
 # Install
 
 ```
-yarn add react-native-image-picker
+yarn add @yunfeic/react-native-imagepicker
 
 # RN >= 0.60
 cd ios && pod install
 
 # RN < 0.60
-react-native link react-native-image-picker
+react-native link @yunfeic/react-native-imagepicker
 ```
 
 ## Post-install Steps
@@ -46,7 +46,7 @@ Note: This library does not require Manifest.permission.CAMERA, if your app decl
 ## Methods
 
 ```js
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from '@yunfeic/react-native-imagepicker';
 ```
 
 ### `launchCamera()`

@@ -67,6 +67,7 @@ RCT_EXPORT_METHOD(launchImageLibrary:(NSDictionary *)options callback:(RCTRespon
             PHPickerConfiguration *configuration = [ImagePickerUtils makeConfigurationFromOptions:options target:target];
             PHPickerViewController *picker = [[PHPickerViewController alloc] initWithConfiguration:configuration];
             picker.delegate = self;
+            picker.modalPresentationStyle = UIModalPresentationFullScreen;
             picker.presentationController.delegate = self;
 
             [self showPickerViewController:picker];
