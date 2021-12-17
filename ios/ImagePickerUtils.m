@@ -49,7 +49,15 @@
 + (PHPickerConfiguration *)makeConfigurationFromOptions:(NSDictionary *)options target:(RNImagePickerTarget)target API_AVAILABLE(ios(14))
 {
 #if __has_include(<PhotosUI/PHPicker.h>)
-    PHPickerConfiguration *configuration = [[PHPickerConfiguration alloc] init];
+    PHPickerConfiguration *configuration;
+    
+    if(options[@"includeExtra"]) {
+        PHPhotoLibrary *photoLibrary = [PHPhotoLibrary sharedPhotoLibrary];
+        configuration = [[PHPickerConfiguration alloc] initWithPhotoLibrary:photoLibrary];
+    } else {
+        configuration = [[PHPickerConfiguration alloc] init];
+    }
+    
     configuration.preferredAssetRepresentationMode = PHPickerConfigurationAssetRepresentationModeCurrent;
     configuration.selectionLimit = [options[@"selectionLimit"] integerValue];
 
@@ -103,6 +111,19 @@
     return (__bridge_transfer NSString *)MIMEType;
 }
 
++ (NSNumber *) getFileSizeFromUrl:(NSURL *)url {
+    NSError *attributesError;
+    NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[url path] error:&attributesError];
+    NSNumber *fileSizeNumber = [fileAttributes objectForKey:NSFileSize];
+    long fileSize = [fileSizeNumber longLongValue];
+
+    if (attributesError) {
+        return nil;
+    }
+
+    return [NSNumber numberWithLong:fileSize];
+}
+
 + (UIImage*)resizeImage:(UIImage*)image maxWidth:(float)maxWidth maxHeight:(float)maxHeight
 {
     if ((maxWidth == 0) || (maxHeight == 0)) {
@@ -133,6 +154,20 @@
     UIGraphicsEndImageContext();
 
     return newImage;
+}
+
++ (PHAsset *)fetchPHAssetOnIOS13:(NSDictionary<NSString *,id> *)info
+{
+    NSURL *referenceURL = [info objectForKey:UIImagePickerControllerReferenceURL];
+
+    if(!referenceURL) {
+      return nil;
+    }
+
+    // We fetch the asset like this to support iOS 10 and lower
+    // see: https://stackoverflow.com/a/52529904/4177049
+    PHFetchResult* fetchResult = [PHAsset fetchAssetsWithALAssetURLs:@[referenceURL] options:nil];
+    return fetchResult.firstObject;
 }
 
 @end
