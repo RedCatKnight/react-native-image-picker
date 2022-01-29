@@ -220,7 +220,6 @@ RCT_EXPORT_METHOD(launchImageLibrary:(NSDictionary *)options callback:(RCTRespon
 
 - (NSString *) getDateTimeInUTC:(NSDate *)date {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
     return [formatter stringFromDate:date];
 }
@@ -429,7 +428,8 @@ RCT_EXPORT_METHOD(launchImageLibrary:(NSDictionary *)options callback:(RCTRespon
 
         if ([provider canLoadObjectOfClass:[UIImage class]]) {
             NSString *identifier = provider.registeredTypeIdentifiers.firstObject;
-            if ([identifier isEqualToString:@"com.apple.live-photo-bundle"]) {
+            // Matches both com.apple.live-photo-bundle and com.apple.private.live-photo-bundle
+            if ([identifier containsString:@"live-photo-bundle"]) {
                 // Handle live photos
                 identifier = @"public.jpeg";
             }
